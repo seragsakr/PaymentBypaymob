@@ -1,7 +1,7 @@
 # payment
 
-A new Flutter project.
-
+An application for authentication with payment gateways through the Paymob platform
+You can pay by card or by reference number
 ## Getting Started
 
 This project is a starting point for a Flutter application.
