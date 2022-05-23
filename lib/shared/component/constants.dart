@@ -13,6 +13,7 @@ const String integrationIDCard = '2080758';
 
 //kiosk
 const String integrationIDKiosk = '2083380';
-const String finalTokenKiosk = '';
-//reference
-const String referaceCode = '';
+String paymentFirstToken = '';
+String paymentOrderId = '';
+String finalToken = '';
+String refcode = '';

@@ -21,6 +21,7 @@ dev_dependencies:
   webview_flutter: ^3.0.4
   flutter_bloc: ^8.0.1
   flutter_lints: ^1.0.0
+  flash: ^2.0.3+2
   flutter_test:
     sdk: flutter
 

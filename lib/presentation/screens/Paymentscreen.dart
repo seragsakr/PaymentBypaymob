@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:payment/business_logic/cubit/payment_cubit.dart';
 import 'package:payment/presentation/screens/referencscreen.dart';
@@ -124,7 +126,7 @@ class PaymentPaymop extends StatelessWidget {
                         text: 'Go To Pay',
                         onpressed: () async {
                           if (formKey.currentState!.validate()) {
-                            paymentCubit.payment(
+                            paymentCubit.PaymentWithCard(
                               firstname: firstnamecontroller.text,
                               lastname: lastnamecontroller.text,
                               email: emailcontroller.text,
@@ -132,7 +134,15 @@ class PaymentPaymop extends StatelessWidget {
                               price: int.parse(pricecontroller.text),
                               integrationmethod: integrationIDCard,
                             );
-                            navigateTo(context, const VisaScreen());
+
+                            Timer(Duration(seconds: 5), ()=> Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const VisaScreen()
+                                ))
+                            );
+                            showdialog(context,'Please wait...',defcolor);
+                            // navigateTo(context, const VisaScreen());
                           }
                         },
                       ),
@@ -145,18 +155,24 @@ class PaymentPaymop extends StatelessWidget {
                         width: MediaQuery.of(context).size.width * .7,
                         color: defcolor,
                         text: 'Get Referance Code',
-                        onpressed: () async {
+                        onpressed: () {
                           if (formKey.currentState!.validate()) {
-                            paymentCubit.payment(
+                            paymentCubit.paymentKiosk(
                               firstname: firstnamecontroller.text,
                               lastname: lastnamecontroller.text,
                               email: emailcontroller.text,
                               phone: phonecontroller.text,
                               price: int.parse(pricecontroller.text),
-                              integrationmethod: integrationIDKiosk,
                             );
-                                                        navigateTo(context, const RefererencCode());
+                            // // await paymentCubit.getRefererencCodeKiosk();
 
+                            Timer(Duration(seconds: 5), ()=> Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const RefererencCode()
+                              ))
+                            );
+                            showdialog(context,'Please wait...',defcolor);
                           }
                         },
                       )

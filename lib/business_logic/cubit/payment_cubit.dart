@@ -12,12 +12,9 @@ class PaymentCubit extends Cubit<PaymentState> {
   static PaymentCubit get(context) => BlocProvider.of(context);
   FirstTokenModel? firsttoken;
   OrderIdModel? orderid;
-  String paymentFirstToken = '';
-  String paymentOrderId = '';
-  String finalTokenCard = '';
-  String refcode = '87878787';
+
 // payment
-  Future payment({
+  Future PaymentWithCard({
     required String firstname,
     required String lastname,
     required String email,
@@ -32,17 +29,12 @@ class PaymentCubit extends Cubit<PaymentState> {
       print('first token is :$paymentFirstToken');
       getOrderId();
       getPaymentkeyToken(
-              firstname: firstname,
-              lastname: lastname,
-              email: email,
-              price: price,
-              phone: phone,
-              integrationmethod: integrationmethod)
-          .then((value) {
-        if (integrationmethod == integrationIDKiosk) {
-          getRefererencCodeKiosk();
-        }
-      });
+          firstname: firstname,
+          lastname: lastname,
+          email: email,
+          price: price,
+          phone: phone,
+          integrationmethod: integrationmethod);
 
       emit(PaymentSuccess());
     }).catchError((error) {
@@ -103,8 +95,8 @@ class PaymentCubit extends Cubit<PaymentState> {
       "integration_id": integrationmethod,
       "lock_order_when_paid": "false"
     }).then((value) {
-      finalTokenCard = value!.data['token'].toString();
-      print('final token is :$finalTokenCard');
+      finalToken = value!.data['token'].toString();
+      print('final token is :$finalToken');
 
       emit(PaymentkeyTokenSuccess());
     }).catchError((error) {
@@ -113,11 +105,13 @@ class PaymentCubit extends Cubit<PaymentState> {
     });
   }
 
+//get ref code
   Future getRefererencCodeKiosk() async {
     DioHelper.postData(url: paymentReferencecodeurl, data: {
       "source": {"identifier": "AGGREGATOR", "subtype": "AGGREGATOR"},
-      "payment_token": finalTokenCard
+      "payment_token": finalToken
     }).then((value) {
+      print(value);
       refcode = value!.data['id'].toString();
       print('referance code is :$refcode');
 
@@ -125,6 +119,37 @@ class PaymentCubit extends Cubit<PaymentState> {
     }).catchError((error) {
       print(error.toString());
       emit(PaymentReferencecodeError(error.toString()));
+    });
+  }
+
+//paymentKiosk
+  Future paymentKiosk({
+    required String firstname,
+    required String lastname,
+    required String email,
+    required String phone,
+    required int price,
+
+  }) async {
+    DioHelper.postData(
+        url: authenticationrequesturl,
+        data: {"api_key": paymentApiKey}).then((value) {
+      paymentFirstToken = value?.data['token'];
+      print('first token is :$paymentFirstToken');
+      getOrderId();
+      getPaymentkeyToken(
+          firstname: firstname,
+          lastname: lastname,
+          email: email,
+          price: price,
+          phone: phone,
+          integrationmethod: integrationIDKiosk);
+      getRefererencCodeKiosk();
+
+      emit(PaymentSuccess());
+    }).catchError((error) {
+      print('error is :' + error.toString());
+      emit(PaymentError(error.toString()));
     });
   }
 }

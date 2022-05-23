@@ -2,13 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:payment/business_logic/cubit/payment_cubit.dart';
 import 'package:payment/presentation/screens/Paymentscreen.dart';
 import 'package:payment/shared/component/colors.dart';
+import 'package:payment/shared/component/constants.dart';
 import 'package:payment/shared/component/functions.dart';
 import 'package:payment/shared/widget/customtext.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class RefererencCode extends StatelessWidget {
+class RefererencCode extends StatefulWidget {
   const RefererencCode({Key? key}) : super(key: key);
 
+  @override
+  State<RefererencCode> createState() => _RefererencCodeState();
+}
+
+class _RefererencCodeState extends State<RefererencCode> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +37,7 @@ class RefererencCode extends StatelessWidget {
       body: BlocConsumer<PaymentCubit, PaymentState>(
         listener: (context, state) {},
         builder: (context, state) {
-          final paymentCubit = PaymentCubit.get(context);
+
 
           return Container(
             color: Colors.blueGrey.shade100,
@@ -39,17 +45,22 @@ class RefererencCode extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    height: MediaQuery.of(context).size.height * .2,
-                    width: MediaQuery.of(context).size.width * .4,
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                          color: defcolor,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.grey),
-                    child: Image.asset(
-                      'assets/pay.jpg',
+                  GestureDetector(
+                    onTap: (){
+                      print(refcode);
+                    },
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * .2,
+                      width: MediaQuery.of(context).size.width * .4,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: defcolor,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.grey),
+                      child: Image.asset(
+                        'assets/pay.jpg',
+                      ),
                     ),
                   ),
                   const SizedBox(
@@ -80,7 +91,7 @@ class RefererencCode extends StatelessWidget {
                         ),
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.grey),
-                    child: CustomText(data: paymentCubit.refcode),
+                    child: CustomText(data: refcode),
                   )
                 ],
               ),
